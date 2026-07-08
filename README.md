@@ -1,3 +1,19 @@
+<p align="center">
+    <a href="https://evomark.co.uk" target="_blank" alt="Link to evoMark's website">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://evomark.co.uk/wp-content/uploads/static/evomark-logo--dark.svg">
+          <source media="(prefers-color-scheme: light)" srcset="https://evomark.co.uk/wp-content/uploads/static/evomark-logo--light.svg">
+          <img alt="evoMark company logo" src="https://evomark.co.uk/wp-content/uploads/static/evomark-logo--light.svg" width="500">
+        </picture>
+    </a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/npm/dm/@evomark/react-shadow-scope.svg" alt="Downloads"></a>
+  <a href="https://www.npmjs.com/package/@evomark/react-shadow-scope"><img src="https://img.shields.io/npm/v/@evomark/react-shadow-scope.svg" alt="Version"></a>
+  <a href="https://github.com/evo-mark/vite-plugin-cpanel-ssl/blob/main/LICENCE"><img src="https://img.shields.io/github/license/evo-mark/vite-plugin-cpanel-ssl?style=flat" alt="Licence"></a>
+</p>
+
 # React Shadow Scope
 
 ```jsx

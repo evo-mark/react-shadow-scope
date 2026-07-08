@@ -1,6 +1,9 @@
 {
 	"name": "@evomark/react-shadow-scope",
-	"version": "2.1.0",
+	"version": "2.1.1",
+	"publishConfig": {
+		"access": "public"
+	},
 	"description": "Brings Shadow DOM CSS encapsulation to React, along with a DSD-compatible template element.",
 	"type": "module",
 	"main": "./dist/index.cjs",

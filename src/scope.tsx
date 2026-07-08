@@ -81,10 +81,19 @@ type Cache = {
 	stylesheets: Map<string, CSSStyleSheet>;
 };
 
+const createCacheVersion = () => {
+	/** @ts-expect-error This does error in non-https contexts */
+	if (globalThis.crypto?.randomUUID) {
+		return crypto.randomUUID();
+	}
+
+	return `cache-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+};
+
 // This object is kept in memory to prevent fetching and/or constructing the stylesheet(s) more than once.
 // ATTN: This is exported for testing purposes only. Do not export this in the main module.
 export const stylesheetCache: Cache = {
-	cv: crypto.randomUUID(),
+	cv: createCacheVersion(),
 	base: css`
 		@layer {
 			/*
