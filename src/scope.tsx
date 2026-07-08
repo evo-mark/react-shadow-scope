@@ -82,8 +82,7 @@ type Cache = {
 };
 
 const createCacheVersion = () => {
-	/** @ts-expect-error This does error in non-https contexts */
-	if (globalThis.crypto?.randomUUID) {
+	if (!!globalThis.crypto?.randomUUID && typeof globalThis.crypto.randomUUID === 'function') {
 		return crypto.randomUUID();
 	}
 
