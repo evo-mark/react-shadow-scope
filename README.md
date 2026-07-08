@@ -1,7 +1,5 @@
 # React Shadow Scope
 
-[![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-
 ```jsx
 <Scope stylesheet={styles}>
 ```
@@ -459,8 +457,11 @@ Tailwind support is already built-in so you don't have to roll your own solution
 
 ## Maintainers
 
-[@jonathandewitt-dev](https://github.com/jonathandewitt-dev)
+[@evo-mark](https://github.com/evo-mark)
+
+Forked from [@jonathandewitt-dev](https://github.com/jonathandewitt-dev)
 
 ## License
 
-MIT © 2023 Jonathan DeWitt
+MIT @ 2026 Evo Mark Ltd
+Forked from MIT © 2023 Jonathan DeWitt

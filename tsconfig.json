@@ -6,8 +6,7 @@
 		"module": "esnext",
 		"target": "ESNext",
 		"esModuleInterop": true,
-		"moduleResolution": "node",
-		"baseUrl": ".",
+		"moduleResolution": "bundler",
 		"types": ["react"]
 	},
 	"exclude": ["demo"]
