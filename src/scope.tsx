@@ -176,7 +176,7 @@ export const Scope = React.forwardRef<HTMLElement, ScopeProps>((props, forwarded
 				const constructedSheet = new CSSStyleSheet();
 				constructedSheet.replaceSync(getCSSText(link.sheet));
 				stylesheetCache.stylesheets.set(href, constructedSheet);
-				stylesheetCache.cv = crypto.randomUUID();
+				stylesheetCache.cv = createCacheVersion();
 			}
 			const _hrefStates = hrefStates.map((state) => ({
 				href: state.href,
