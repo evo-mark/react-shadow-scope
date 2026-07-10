@@ -170,25 +170,35 @@ export const Scope = React.forwardRef<HTMLElement, ScopeProps>((props, forwarded
 
 	const onHrefLoad: React.EventHandler<React.SyntheticEvent<HTMLLinkElement>> = React.useCallback(
 		(event) => {
-			const link = event.target as HTMLLinkElement;
-			const href = link.href.replace(location.origin, '');
+			const link = event.currentTarget;
+			const href = new URL(link.href).pathname;
+
 			if (link.sheet !== null) {
 				const constructedSheet = new CSSStyleSheet();
 				constructedSheet.replaceSync(getCSSText(link.sheet));
 				stylesheetCache.stylesheets.set(href, constructedSheet);
 				stylesheetCache.cv = createCacheVersion();
 			}
-			const _hrefStates = hrefStates.map((state) => ({
-				href: state.href,
-				loaded: state.href === href || state.loaded,
-			}));
-			setHrefStates(_hrefStates);
-			if (_hrefStates.every((state) => state.loaded)) {
-				setHrefsLoaded(true);
-				const event = new CustomEvent('load', { detail: { hrefs: allHrefs } });
-				tagRef.current?.dispatchEvent(event);
-				props.onLoad?.(event);
-			}
+
+			setHrefStates((current) => {
+				const next = current.map((state) => ({
+					...state,
+					loaded: state.loaded || state.href === href,
+				}));
+
+				if (next.every((state) => state.loaded)) {
+					setHrefsLoaded(true);
+
+					const loadEvent = new CustomEvent('load', {
+						detail: { hrefs: allHrefs },
+					});
+
+					tagRef.current?.dispatchEvent(loadEvent);
+					props.onLoad?.(loadEvent);
+				}
+
+				return next;
+			});
 		},
 		[allHrefs.join()],
 	);

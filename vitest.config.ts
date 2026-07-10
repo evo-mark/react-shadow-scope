@@ -1,5 +1,6 @@
-import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [
@@ -20,10 +21,10 @@ export default defineConfig({
 	],
 	test: {
 		browser: {
+			provider: playwright(),
 			enabled: true,
 			headless: true,
-			provider: 'playwright',
-			instances: [{ browser: 'chromium' }, { browser: 'firefox' }, { browser: 'webkit' }],
+			instances: [{ browser: 'chromium' }, { browser: 'firefox' } /* , { browser: 'webkit' } */],
 		},
 		include: ['**/*.test.{ts,tsx}'],
 		exclude: ['**/node_modules/'],

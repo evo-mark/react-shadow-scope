@@ -1,4 +1,4 @@
-import { Scope, useCSS, Template, Tailwind } from 'react-shadow-scope';
+import { Scope, Tailwind, Template, useCSS } from '@evomark/react-shadow-scope';
 
 export const Demo = () => {
 	const css = useCSS();
@@ -90,6 +90,17 @@ export const Demo = () => {
 
 			<Scope href="/styles.css">
 				<p className="info">These styles were fetched with the `href` prop.</p>
+			</Scope>
+
+			<Scope
+				hrefs={['/font.css', '/additional-styles.css']}
+				pendingStyles={css`
+					:host {
+						opacity: 0;
+					}
+				`}
+			>
+				<p className="evomark">These multiple stylesheets were fetched with the `hrefs` prop.</p>
 			</Scope>
 
 			<Tailwind>

@@ -1,0 +1,13 @@
+.evomark {
+	background-color: #212121;
+	color: #ff6a04;
+	padding: 1rem;
+	font-weight: 400;
+	font-family: 'Roboto', sans-serif;
+	font-optical-sizing: auto;
+	font-variation-settings: 'wdth' 100;
+}
+
+:host {
+	transition: opacity 300ms ease-in-out;
+}

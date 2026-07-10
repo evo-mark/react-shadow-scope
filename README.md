@@ -40,6 +40,7 @@ As a rule of thumb, you should limit your global CSS to little or nothing. The n
   - [Excluding Children From the Scope](#excluding-children-from-the-scope)
   - [Templates](#templates)
   - [Tailwind](#tailwind)
+- [Why the Fork?](#why-the-fork)
 - [Maintainers](#maintainers)
 - [License](#license)
 
@@ -470,6 +471,12 @@ Tailwind support is already built-in so you don't have to roll your own solution
 - `customStyles` - Pass a string or `CSSStyleSheet` (the `css` tagged template function is recommended)
 - `pendingStyles` - Works the same as `pendingStyles` on the `<Scope>` component.
 - `slottedContent` - Works the same as `slottedContent` on the `<Scope>` component.
+
+## Why the Fork?
+
+We've been using this package for a while here at evoMark and there haven't been any updates in a decent amount of time.
+
+With a few bugs and issues getting in our way, we decided to do what open-source does best...
 
 ## Maintainers
 
