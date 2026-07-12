@@ -43,11 +43,12 @@ export type ScopeProps = React.PropsWithChildren<
 		/**
 		 * The HREF of the stylesheet to encapsulate.
 		 */
-		href: string;
+		href: string | string[];
 		/**
 		 * Multiple HREFs of stylesheets to encapsulate.
 		 *
 		 * @defaultValue `[]`
+		 * @deprecated Next version will use a single `href` prop which accepts a string or array of strings
 		 */
 		hrefs: string[];
 		/**
@@ -147,7 +148,15 @@ export const Scope = React.forwardRef<HTMLElement, ScopeProps>((props, forwarded
 	} = props;
 
 	const [hrefsLoaded, setHrefsLoaded] = React.useState<boolean>(false);
-	const allHrefs = React.useMemo(() => (typeof href !== 'undefined' ? [href, ...hrefs] : hrefs), [href, hrefs.join()]);
+
+	/**
+	 * Create a combined array of `href` and `hrefs`, normalising the former and removing all duplicates and empty strings
+	 */
+	const allHrefs = React.useMemo(() => {
+		const normalisedHref: string[] = !href ? [] : Array.isArray(href) ? href : [href];
+		return [...new Set([...normalisedHref, ...hrefs].filter((h): h is string => Boolean(h)))];
+	}, [Array.isArray(href) ? href.join() : href, hrefs.join()]);
+
 	const pendingHrefs = React.useMemo(
 		() => allHrefs.filter((href) => !stylesheetCache.stylesheets.has(href)),
 		[allHrefs.join(), stylesheetCache.cv],

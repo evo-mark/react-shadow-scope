@@ -93,14 +93,14 @@ export const Demo = () => {
 			</Scope>
 
 			<Scope
-				hrefs={['/font.css', '/additional-styles.css']}
+				href={['/some-styles.css', '/additional-styles.css']}
 				pendingStyles={css`
 					:host {
 						opacity: 0;
 					}
 				`}
 			>
-				<p className="evomark">These multiple stylesheets were fetched with the `hrefs` prop.</p>
+				<p className="evomark">These multiple stylesheets were fetched with the `href` prop.</p>
 			</Scope>
 
 			<Tailwind>

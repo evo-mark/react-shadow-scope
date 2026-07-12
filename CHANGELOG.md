@@ -1,3 +1,8 @@
+## Next
+
+- **Improvement**: `<Scope>` now accepts either an array or a string on the `href` prop
+- **Deprecation**: `<Scope>` prop `hrefs` is deprecated pending removal in v3
+
 ## Version 2.1.4 (2026-07-10)
 
 - **Improvement**: Use `currentTarget` for getting `<link>` element in loaded hrefs callback
