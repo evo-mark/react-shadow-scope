@@ -170,6 +170,10 @@ export type FormControlType =
 
 export type HTMLFormControlElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
+type FormControlElementConstructor = new () => HTMLElement & {
+	formControl: FormControlType;
+};
+
 export const DEFAULT_FORM_CONTROL: FormControlType = {
 	control: 'text',
 	value: null,
@@ -192,7 +196,7 @@ export const parseVariables = (str: string, ...values: unknown[]) => {
 	return str.replace(/\{\}/g, () => String(values[i++]));
 };
 
-export const getFormControlElement = () =>
+export const getFormControlElement = (): FormControlElementConstructor =>
 	class FormControlElement extends HTMLElement {
 		static formAssociated = true;
 		#internals = this.attachInternals();

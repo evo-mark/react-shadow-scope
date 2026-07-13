@@ -47,7 +47,9 @@ As a rule of thumb, you should limit your global CSS to little or nothing. The n
 ## Install
 
 ```
-npm i react-shadow-scope
+pnpm add @evomark/react-shadow-scope
+// OR
+npm i @evomark/react-shadow-scope
 ```
 
 ## Usage
@@ -254,10 +256,10 @@ When rendering on the server, this will simply add a `<link>` tag pointing to th
 
 Once the remote stylesheet has loaded, it will be cloned into a constructable `CSSStyleSheet` and cached by href, so they won't be loaded (or constructed) multiple times even if they were loaded by a different `<Scope>`.
 
-You can also link multiple stylesheets using the `hrefs` (plural) prop.
+You can also link multiple stylesheets by passing an array to the `href` prop.
 
 ```jsx
-<Scope hrefs={['/theme.css', '/mystyles.css']}>
+<Scope href={['/theme.css', '/mystyles.css']}>
 ```
 
 When linking external stylesheets, server-rendered components will appear as expected on the first paint. Client rendered components, however, would have a FOUC issue if not for some extra care. While the styles are busy loading on the client, we apply `:host { visibility: hidden; }` by default. These styles can be customized as well, and will only apply while the fetch promise is pending.
