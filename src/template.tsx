@@ -127,10 +127,37 @@ export const Template = React.forwardRef<HTMLTemplateElement, TemplateProps>((pr
 	);
 });
 
+/**
+ * Applies the stylesheets to a shadow root, reusing a single <style> element where adoptedStyleSheets isn't supported
+ */
+const applyStyleSheets = (shadowRoot: ShadowRoot, adoptedStyleSheets: StyleSheet[]) => {
+	if (adoptedStylesSupported()) {
+		shadowRoot.adoptedStyleSheets = adoptedStyleSheets.map((stylesheet) => {
+			if (typeof stylesheet === 'string') {
+				return css`
+					${stylesheet}
+				`;
+			}
+			return stylesheet;
+		}) as CSSStyleSheet[];
+		return;
+	}
+
+	let style = shadowRoot.querySelector<HTMLStyleElement>('style[data-shadow-scope]');
+	if (style === null) {
+		style = document.createElement('style');
+		style.dataset.shadowScope = '';
+		shadowRoot.appendChild(style);
+	}
+	style.textContent = (adoptedStyleSheets as string[]).join('');
+};
+
 const ClientTemplate = React.forwardRef<HTMLTemplateElement, TemplateProps>((props: TemplateProps, forwardedRef) => {
 	const { children, adoptedStyleSheets, ...forwardedProps } = props;
 	const templateRef = React.useRef<HTMLTemplateElement>(null);
 	const [shadowRoot, setShadowRoot] = React.useState<ShadowRoot | null>(null);
+	const adoptedStyleSheetsRef = React.useRef(adoptedStyleSheets);
+	adoptedStyleSheetsRef.current = adoptedStyleSheets;
 
 	React.useLayoutEffect(() => {
 		// Synchronize internal template ref with the forwarded ref
@@ -153,6 +180,12 @@ const ClientTemplate = React.forwardRef<HTMLTemplateElement, TemplateProps>((pro
 							...DEFAULT_SHADOWROOT_INIT,
 							...mapAttrsToInit(forwardedProps),
 						});
+					// Style the shadow root before any children render into it. Children that measure
+					// themselves in layout effects would otherwise compute unstyled values, and any
+					// CSS transitions would then animate from the browser defaults
+					if (adoptedStyleSheetsRef.current !== undefined) {
+						applyStyleSheets(_shadowRoot, adoptedStyleSheetsRef.current);
+					}
 					setShadowRoot(_shadowRoot);
 				} catch {
 					// The error is most likely thrown because the shadow root is already attached.
@@ -164,24 +197,10 @@ const ClientTemplate = React.forwardRef<HTMLTemplateElement, TemplateProps>((pro
 		return () => setShadowRoot(null);
 	}, []);
 
-	// Layout effect, so the styles are in place before the browser paints the portalled children
+	// Layout effect, so updated styles are in place before the browser paints
 	React.useLayoutEffect(() => {
 		if (adoptedStyleSheets === undefined || shadowRoot === null) return;
-		if (adoptedStylesSupported()) {
-			const _adoptedStyleSheets = adoptedStyleSheets.map((stylesheet) => {
-				if (typeof stylesheet === 'string') {
-					return css`
-						${stylesheet}
-					`;
-				}
-				return stylesheet;
-			});
-			shadowRoot.adoptedStyleSheets = _adoptedStyleSheets as CSSStyleSheet[];
-		} else {
-			const style = document.createElement('style');
-			style.textContent = (adoptedStyleSheets as string[]).join('');
-			shadowRoot?.appendChild(style);
-		}
+		applyStyleSheets(shadowRoot, adoptedStyleSheets);
 	}, [shadowRoot, adoptedStyleSheets]);
 
 	return shadowRoot ? ReactDOM.createPortal(children, shadowRoot) : <template ref={templateRef} />;
