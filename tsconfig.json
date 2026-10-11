@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-	"declaration": true,
+		"declaration": true,
 		"strict": true,
 		"jsx": "react",
 		"module": "esnext",
@@ -9,7 +9,8 @@
 		"moduleResolution": "bundler",
 		"types": ["react"],
 		"isolatedModules": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"ignoreDeprecations": "6.0"
 	},
 	"include": ["src", "test"]
 }
