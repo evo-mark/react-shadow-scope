@@ -164,7 +164,8 @@ const ClientTemplate = React.forwardRef<HTMLTemplateElement, TemplateProps>((pro
 		return () => setShadowRoot(null);
 	}, []);
 
-	React.useEffect(() => {
+	// Layout effect, so the styles are in place before the browser paints the portalled children
+	React.useLayoutEffect(() => {
 		if (adoptedStyleSheets === undefined || shadowRoot === null) return;
 		if (adoptedStylesSupported()) {
 			const _adoptedStyleSheets = adoptedStyleSheets.map((stylesheet) => {

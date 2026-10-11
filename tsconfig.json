@@ -1,13 +1,15 @@
 {
 	"compilerOptions": {
-		"declaration": true,
+	"declaration": true,
 		"strict": true,
 		"jsx": "react",
 		"module": "esnext",
 		"target": "ESNext",
 		"esModuleInterop": true,
 		"moduleResolution": "bundler",
-		"types": ["react"]
+		"types": ["react"],
+		"isolatedModules": true,
+		"skipLibCheck": true
 	},
-	"exclude": ["demo"]
+	"include": ["src", "test"]
 }

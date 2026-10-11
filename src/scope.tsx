@@ -118,6 +118,15 @@ const getLocation = () => {
 };
 
 /**
+ * Stylesheets are cached by path, so absolute and relative hrefs to the same file share an entry
+ */
+const toCacheKey = (href: string) => {
+	if (typeof location === 'undefined') return href;
+	return new URL(href, location.href).pathname;
+};
+
+
+/**
  * Creates a shadow DOM encapsulated scope for CSS.
  *
  * @example
@@ -158,12 +167,12 @@ export const Scope = React.forwardRef<HTMLElement, ScopeProps>((props, forwarded
 	}, [Array.isArray(href) ? href.join() : href, hrefs.join()]);
 
 	const pendingHrefs = React.useMemo(
-		() => allHrefs.filter((href) => !stylesheetCache.stylesheets.has(href)),
+		() => allHrefs.filter((href) => !stylesheetCache.stylesheets.has(toCacheKey(href))),
 		[allHrefs.join(), stylesheetCache.cv],
 	);
 	const pending = pendingHrefs.length > 0 && !hrefsLoaded;
 	const [hrefStates, setHrefStates] = React.useState(
-		pendingHrefs.map((href) => ({ href: href.replace(getLocation(), ''), loaded: false })),
+		pendingHrefs.map((href) => ({ href: href.replace(getLocation(), ''), key: toCacheKey(href), loaded: false })),
 	);
 
 	const tagRef = React.useRef<HTMLElement | null>(null);
@@ -180,7 +189,7 @@ export const Scope = React.forwardRef<HTMLElement, ScopeProps>((props, forwarded
 	const onHrefLoad: React.EventHandler<React.SyntheticEvent<HTMLLinkElement>> = React.useCallback(
 		(event) => {
 			const link = event.currentTarget;
-			const href = new URL(link.href).pathname;
+			const href = toCacheKey(link.href);
 
 			if (link.sheet !== null) {
 				const constructedSheet = new CSSStyleSheet();
@@ -192,7 +201,7 @@ export const Scope = React.forwardRef<HTMLElement, ScopeProps>((props, forwarded
 			setHrefStates((current) => {
 				const next = current.map((state) => ({
 					...state,
-					loaded: state.loaded || state.href === href,
+					loaded: state.loaded || state.key === href,
 				}));
 
 				if (next.every((state) => state.loaded)) {
@@ -222,7 +231,7 @@ export const Scope = React.forwardRef<HTMLElement, ScopeProps>((props, forwarded
 		_cssStyleSheets.push(stylesheetCache.base, ...stylesheets);
 		if (pending) _cssStyleSheets.push(pendingStyles);
 		for (const href of allHrefs) {
-			const cachedSheet = stylesheetCache.stylesheets.get(href);
+			const cachedSheet = stylesheetCache.stylesheets.get(toCacheKey(href));
 			if (cachedSheet !== undefined) _cssStyleSheets.push(cachedSheet);
 		}
 		if (typeof stylesheet !== 'undefined') _cssStyleSheets.push(stylesheet);
